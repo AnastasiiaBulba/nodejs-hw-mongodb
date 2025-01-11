@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import pino from 'pino-http';
+import { getAllContacts, getContactById } from './services/contacts.js';
 
 export function setupServer() {
   // створюю екземпляр сервера
@@ -27,5 +28,33 @@ export function setupServer() {
   //   і запускаю сервер
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+  });
+
+  // маршрут щоб отримати всі контакти
+  app.get('/contacts', async (req, res) => {
+    const contacts = await getAllContacts();
+
+    res.status(200).json({
+      data: contacts,
+    });
+  });
+
+  // маршрут щоб отримати контакт один за айді
+  app.get('/contacts/:contactId', async (req, res, next) => {
+    const { contactId } = req.params;
+    const contact = await getContactById(contactId);
+
+    // Відповідь, якщо контакт не знайдено
+    if (!contact) {
+      res.status(404).json({
+        message: 'Contact not found',
+      });
+      return;
+    }
+
+    // Відповідь, якщо контакт знайдено
+    res.status(200).json({
+      data: contact,
+    });
   });
 }
