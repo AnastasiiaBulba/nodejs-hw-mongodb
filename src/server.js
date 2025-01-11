@@ -17,24 +17,13 @@ export function setupServer() {
     }),
   );
 
-  // обробляю маршрути які не існують
-  app.use((req, res) => {
-    res.status(404).json({ message: 'Not found' });
-  });
-
-  // далі встановлюю порт
-  const PORT = process.env.PORT || 3000;
-
-  //   і запускаю сервер
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-  });
-
   // маршрут щоб отримати всі контакти
   app.get('/contacts', async (req, res) => {
     const contacts = await getAllContacts();
 
     res.status(200).json({
+      status: 200,
+      message: 'Successfully found contacts!',
       data: contacts,
     });
   });
@@ -54,12 +43,27 @@ export function setupServer() {
 
     // Відповідь, якщо контакт знайдено
     res.status(200).json({
+      status: 200,
+      message: `Successfully found contact with id ${contactId}!`,
       data: contact,
     });
+  });
+
+  // обробляю маршрути які не існують
+  app.use((req, res) => {
+    res.status(404).json({ message: 'Not found' });
   });
 
   app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({ message: 'Internal server error' });
+  });
+
+  // далі встановлюю порт
+  const PORT = process.env.PORT || 3000;
+
+  //   і запускаю сервер
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
   });
 }
