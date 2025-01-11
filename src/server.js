@@ -7,6 +7,9 @@ export function setupServer() {
   // створюю екземпляр сервера
   const app = express();
 
+  // парсю
+  app.use(express.json());
+
   // далі додаю мідлвари (середовище)
   app.use(cors());
   app.use(
