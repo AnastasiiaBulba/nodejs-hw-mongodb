@@ -3,6 +3,8 @@ import cors from 'cors';
 import pino from 'pino-http';
 import { getAllContacts, getContactById } from './services/contacts.js';
 
+const PORT = process.env.PORT || 3000;
+
 export function setupServer() {
   // створюю екземпляр сервера
   const app = express();
@@ -62,8 +64,8 @@ export function setupServer() {
     res.status(500).json({ message: 'Internal server error' });
   });
 
-  // далі встановлюю порт
-  const PORT = process.env.PORT || 3000;
+  // далі встановлюю порт (винесла до гори)
+  // const PORT = process.env.PORT || 3000;
 
   //   і запускаю сервер
   app.listen(PORT, () => {
