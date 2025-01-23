@@ -11,6 +11,7 @@ import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
 
+// перенесла вниз
 // export const getContactsController = async (req, res, next) => {
 //   try {
 //     const contacts = await getAllContacts();
