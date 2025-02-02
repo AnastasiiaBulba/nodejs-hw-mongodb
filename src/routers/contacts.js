@@ -13,33 +13,52 @@ import {
   createContactSchema,
   updateContactSchema,
 } from '../validation/contacts.js';
+import { authenticate } from '../middlewares/authenticate.js';
+
+import { checkRoles } from '../middlewares/checkRoles.js';
+import { ROLES } from '../constants/index.js';
 
 const router = Router();
 
-router.get('/contacts', ctrlWrapper(getContactsController));
+router.get('/', checkRoles(ROLES.TEACHER), ctrlWrapper(getContactsController));
 router.get(
-  '/contacts/:contactId',
+  '/:contactId',
+  checkRoles(ROLES.TEACHER),
   isValidId,
   ctrlWrapper(getContactByIdController),
 );
 
 router.post(
-  '/contacts',
+  '/',
+  checkRoles(ROLES.TEACHER),
   validateBody(createContactSchema),
   ctrlWrapper(createContactController),
 );
 
+// router.put(
+//   '/:contactId',
+//   isValidId,
+//   validateBody(createContactSchema),
+//   ctrlWrapper(upsertContactController),
+// );
+
 router.patch(
-  '/contacts/:contactId',
+  '/:contactId',
+  checkRoles(ROLES.TEACHER),
   isValidId,
   validateBody(updateContactSchema),
   ctrlWrapper(patchContactController),
 );
 
 router.delete(
-  '/contacts/:contactId',
+  '/:contactId',
+  checkRoles(ROLES.TEACHER),
   isValidId,
   ctrlWrapper(deleteContactController),
 );
+
+// використовуємо middleware authenticate в роутері для запитів до колекції контактів
+router.use(authenticate);
+router.get('/', ctrlWrapper(getContactsController));
 
 export default router;
