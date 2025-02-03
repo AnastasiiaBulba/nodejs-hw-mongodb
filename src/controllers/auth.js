@@ -35,25 +35,25 @@ export const loginUserController = async (req, res) => {
 };
 
 // контролел для логаут
-// export const logoutUserController = async (req, res) => {
-//   if (req.cookies.sessionId) {
-//     await logoutUser(req.cookies.sessionId);
-//   }
-
-//   res.clearCookie('sessionId');
-//   res.clearCookie('refreshToken');
-
-//   res.status(204).send();
-// };
-export const logoutUserController = async (req, res, next) => {
-  try {
+export const logoutUserController = async (req, res) => {
+  if (req.cookies.sessionId) {
     await logoutUser(req.cookies.sessionId);
-    res.clearCookie('refreshToken');
-    res.status(204).send();
-  } catch (error) {
-    next(error);
   }
+
+  res.clearCookie('sessionId');
+  res.clearCookie('refreshToken');
+
+  res.status(204).send();
 };
+// export const logoutUserController = async (req, res, next) => {
+//   try {
+//     await logoutUser(req.cookies.sessionId);
+//     res.clearCookie('refreshToken');
+//     res.status(204).send();
+//   } catch (error) {
+//     next(error);
+//   }
+// };
 
 // контролер для сесії
 const setupSession = (res, session) => {

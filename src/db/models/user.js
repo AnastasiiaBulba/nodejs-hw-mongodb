@@ -1,6 +1,6 @@
 import { model, Schema } from 'mongoose';
 
-import { ROLES } from '../../constants/index.js';
+// import { ROLES } from '../../constants/index.js';
 
 // схема-модель користувача
 const usersSchema = new Schema(
@@ -10,8 +10,8 @@ const usersSchema = new Schema(
     password: { type: String, required: true },
     role: {
       type: String,
-      enum: [ROLES.TEACHER, ROLES.PARENT],
-      default: ROLES.PARENT,
+      // enum: [ROLES.TEACHER, ROLES.PARENT],
+      // default: ROLES.PARENT,
     },
   },
   // це автоматичні createdAt і updatedAt
