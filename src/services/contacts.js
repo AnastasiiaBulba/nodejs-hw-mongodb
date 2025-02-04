@@ -18,7 +18,7 @@ export const getContactById = async (userId, contactId) => {
   try {
     const contact = await ContactsCollection.findOne({
       _id: contactId,
-      owner: userId,
+      userId,
     });
     return contact;
   } catch (error) {
@@ -32,9 +32,14 @@ export const createContact = async (payload) => {
   return contact;
 };
 
-export const updateContact = async (userId, payload, options = {}) => {
+export const updateContact = async (
+  userId,
+  contactId,
+  payload,
+  options = {},
+) => {
   const rawResult = await ContactsCollection.findOneAndUpdate(
-    { _id: userId },
+    { _id: contactId, userId },
     payload,
     {
       new: true,
@@ -51,9 +56,10 @@ export const updateContact = async (userId, payload, options = {}) => {
   };
 };
 
-export const deleteContact = async (userId) => {
+export const deleteContact = async (contactId, userId) => {
   const contact = await ContactsCollection.findOneAndDelete({
-    _id: userId,
+    _id: contactId,
+    userId,
   });
 
   return contact;

@@ -22,7 +22,7 @@ export const createContactSchema = Joi.object({
       'any.only': 'Contact type must be one of: work, home, personal',
       'any.required': 'Contact type is required',
     }),
-  userId: Joi.string().required().messages({
+  userId: Joi.string().optional().messages({
     'any.required': 'User ID is required',
   }),
 });
