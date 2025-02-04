@@ -29,7 +29,8 @@ import { parseFilterParams } from '../utils/parseFilterParams.js';
 export const getContactByIdController = async (req, res, next) => {
   try {
     const { contactId } = req.params;
-    const contact = await getContactById(contactId);
+    const { userId } = req.user;
+    const contact = await getContactById(userId, contactId);
 
     // Відповідь, якщо контакт не знайдено
     if (!contact) {
@@ -48,7 +49,8 @@ export const getContactByIdController = async (req, res, next) => {
 };
 
 export const createContactController = async (req, res) => {
-  const contact = await createContact(req.body);
+  const { userId } = req.user;
+  const contact = await createContact({ ...req.body, userId });
 
   res.status(201).json({
     status: 201,
@@ -59,7 +61,8 @@ export const createContactController = async (req, res) => {
 
 export const patchContactController = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await updateContact(contactId, req.body);
+  const { userId } = req.user;
+  const result = await updateContact(userId, contactId, req.body);
 
   if (!result) {
     next(createHttpError(404, 'Contact not found'));
@@ -93,12 +96,15 @@ export const getContactsController = async (req, res) => {
 
   const filter = parseFilterParams(req.query);
 
+  const { userId } = req.user;
+
   const contacts = await getAllContacts({
     page,
     perPage,
     sortBy,
     sortOrder,
     filter,
+    userId,
   });
 
   res.json({

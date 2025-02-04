@@ -16,10 +16,10 @@ import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 
 export const getContactById = async (userId, contactId) => {
   try {
-    const contact = await ContactsCollection.findOneAndUpdate(
-      { _id: userId },
-      contactId,
-    );
+    const contact = await ContactsCollection.findOne({
+      _id: contactId,
+      owner: userId,
+    });
     return contact;
   } catch (error) {
     console.error('Error fetching contacts:', error);

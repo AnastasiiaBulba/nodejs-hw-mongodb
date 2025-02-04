@@ -16,6 +16,9 @@ export const registerUserController = async (req, res) => {
 export const loginUserController = async (req, res) => {
   const session = await loginUser(req.body);
 
+  // перевірка
+  console.log('Session after login:', session);
+
   res.cookie('refreshToken', session.refreshToken, {
     httpOnly: true,
     expires: new Date(Date.now() + ONE_DAY),
@@ -23,6 +26,12 @@ export const loginUserController = async (req, res) => {
   res.cookie('sessionId', session._id, {
     httpOnly: true,
     expires: new Date(Date.now() + ONE_DAY),
+  });
+
+  // перевірка
+  console.log('Cookies set:', {
+    refreshToken: session.refreshToken,
+    sessionId: session._id,
   });
 
   res.json({
@@ -36,6 +45,9 @@ export const loginUserController = async (req, res) => {
 
 // контролел для логаут
 export const logoutUserController = async (req, res) => {
+  console.log('Cookies:', req.cookies);
+  console.log('Session ID:', req.cookies.sessionId);
+
   if (req.cookies.sessionId) {
     await logoutUser(req.cookies.sessionId);
   }
@@ -68,10 +80,23 @@ const setupSession = (res, session) => {
 };
 
 export const refreshUserSessionController = async (req, res) => {
+  // перевірка
+  console.log('Cookies at refresh:', req.cookies);
+  console.log('Session ID:', req.cookies.sessionId);
+  console.log('Refresh Token:', req.cookies.refreshToken);
+
+  if (!req.cookies.sessionId || !req.cookies.refreshToken) {
+    console.log('Missing sessionId or refreshToken!');
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+  // кнець перевірки
+
   const session = await refreshUsersSession({
     sessionId: req.cookies.sessionId,
     refreshToken: req.cookies.refreshToken,
   });
+
+  console.log('New session:', session);
 
   setupSession(res, session);
 
