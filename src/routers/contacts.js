@@ -15,6 +15,8 @@ import {
 } from '../validation/contacts.js';
 import { authenticate } from '../middlewares/authenticate.js';
 
+import { upload } from '../middlewares/multer.js';
+
 // import { checkRoles } from '../middlewares/checkRoles.js';
 // import { ROLES } from '../constants/index.js';
 
@@ -27,6 +29,7 @@ router.get('/:contactId', isValidId, ctrlWrapper(getContactByIdController));
 
 router.post(
   '/',
+  upload.single('photo'),
   validateBody(createContactSchema),
   ctrlWrapper(createContactController),
 );
@@ -34,6 +37,7 @@ router.post(
 // router.put(
 //   '/:contactId',
 //   isValidId,
+// upload.single('photo'),
 //   validateBody(createContactSchema),
 //   ctrlWrapper(upsertContactController),
 // );
@@ -42,6 +46,7 @@ router.patch(
   '/:contactId',
   // checkRoles(ROLES.TEACHER),
   isValidId,
+  upload.single('photo'),
   validateBody(updateContactSchema),
   ctrlWrapper(patchContactController),
 );
