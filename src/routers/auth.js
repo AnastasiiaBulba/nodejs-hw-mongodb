@@ -38,16 +38,16 @@ router.post('/refresh', ctrlWrapper(refreshUserSessionController));
 
 // роутер для скидання паролю
 router.post(
-  '/request-reset-email',
+  '/send-reset-email',
   validateBody(requestResetEmailSchema),
   ctrlWrapper(requestResetEmailController),
 );
 
-router.post(
-  '/reset-password',
-  validateBody(resetPasswordSchema),
-  ctrlWrapper(resetPasswordController),
-);
+// router.post(
+//   '/reset-password',
+//   validateBody(resetPasswordSchema),
+//   ctrlWrapper(resetPasswordController),
+// );
 
 router.post(
   '/reset-pwd',
