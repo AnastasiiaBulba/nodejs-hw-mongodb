@@ -52,15 +52,34 @@ export const getContactByIdController = async (req, res, next) => {
   }
 };
 
-export const createContactController = async (req, res) => {
-  const { _id: userId } = req.user;
-  const contact = await createContact({ ...req.body, userId });
+export const createContactController = async (req, res, next) => {
+  try {
+    const { _id: userId } = req.user;
+    const photo = req.file;
 
-  res.status(201).json({
-    status: 201,
-    message: `Successfully created a student!`,
-    data: contact,
-  });
+    let photoUrl;
+    if (photo) {
+      if (getEnvVar('ENABLE_CLOUDINARY') === true) {
+        photoUrl = await saveFileToCloudinary(photo);
+      } else {
+        photoUrl = await saveFileToUploadDir(photo);
+      }
+    }
+
+    const contact = await createContact({
+      ...req.body,
+      userId,
+      photo: photoUrl,
+    });
+
+    res.status(201).json({
+      status: 201,
+      message: `Successfully created a student!`,
+      data: contact,
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const patchContactController = async (req, res, next) => {
@@ -72,7 +91,7 @@ export const patchContactController = async (req, res, next) => {
   let photoUrl;
 
   if (photo) {
-    if (getEnvVar('ENABLE_CLOUDINARY') === 'true') {
+    if (getEnvVar('ENABLE_CLOUDINARY') === true) {
       photoUrl = await saveFileToCloudinary(photo);
     } else {
       photoUrl = await saveFileToUploadDir(photo);
