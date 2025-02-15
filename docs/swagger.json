@@ -63,7 +63,7 @@
             "name": "sortBy",
             "schema": {
               "type": "string",
-              "example": "age"
+              "example": "name"
             },
             "description": "All contact's fields can be mentioned. Default value - _id"
           },
@@ -81,39 +81,7 @@
           },
           {
             "in": "query",
-            "name": "minAvgMark",
-            "schema": {
-              "type": "number",
-              "example": 4
-            }
-          },
-          {
-            "in": "query",
-            "name": "maxAvgMark",
-            "schema": {
-              "type": "number",
-              "example": 10
-            }
-          },
-          {
-            "in": "query",
-            "name": "minAge",
-            "schema": {
-              "type": "number",
-              "example": 10
-            }
-          },
-          {
-            "in": "query",
-            "name": "maxAge",
-            "schema": {
-              "type": "number",
-              "example": 16
-            }
-          },
-          {
-            "in": "query",
-            "name": "gender",
+            "name": "type",
             "schema": {
               "type": "string",
               "enum": [
@@ -121,7 +89,15 @@
                 "home",
                 "personal"
               ],
-              "example": "male"
+              "example": "personal"
+            }
+          },
+          {
+            "in": "query",
+            "name": "isFavourite",
+            "schema": {
+              "type": "boolean",
+              "example": true
             }
           }
         ],
@@ -219,10 +195,8 @@
                 "type": "object",
                 "required": [
                   "name",
-                  "email",
                   "contactType",
-                  "phoneNumber",
-                  "photo"
+                  "phoneNumber"
                 ],
                 "properties": {
                   "name": {
@@ -234,6 +208,14 @@
                     "description": "Contact's phone number",
                     "type": "string",
                     "example": "+380123456789"
+                  },
+                  "email": {
+                    "description": "Contact's email",
+                    "type": "string"
+                  },
+                  "isFavourite": {
+                    "description": "Contact's in the favourite list",
+                    "type": "boolean"
                   },
                   "contactType": {
                     "description": "Contact's type",
@@ -414,7 +396,7 @@
           }
         ],
         "responses": {
-          "200": {
+          "204": {
             "description": "Delete contact",
             "content": {
               "application/json": {
@@ -428,11 +410,11 @@
                   "properties": {
                     "status": {
                       "type": "integer",
-                      "example": 200
+                      "example": 204
                     },
                     "message": {
                       "type": "string",
-                      "example": "Successfully patched a contact!"
+                      "example": "Successfully found contact with id 65ca67e7ae7f10c88b598008!"
                     },
                     "data": {
                       "type": "object",
@@ -442,9 +424,6 @@
                 }
               }
             }
-          },
-          "401": {
-            "$ref": "#/components/responses/401"
           },
           "404": {
             "$ref": "#/components/responses/404"

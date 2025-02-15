@@ -12,10 +12,8 @@ requestBody:
         type: object
         required:
           - name
-          - email
           - contactType
           - phoneNumber
-          - photo
         properties:
           name:
             description: "Contact's name"
@@ -25,6 +23,12 @@ requestBody:
             description: "Contact's phone number"
             type: string
             example: '+380123456789'
+          email:
+            description: "Contact's email"
+            type: string
+          isFavourite:
+            description: "Contact's in the favourite list"
+            type: boolean
           contactType:
             description: "Contact's type"
             type: string
